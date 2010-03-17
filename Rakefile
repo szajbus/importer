@@ -12,6 +12,9 @@ begin
     gem.authors = ["Michał Szajbe"]
     gem.add_dependency "crack", ">= 0"
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+    gem.add_development_dependency "factory_girl", ">= 0"
+    gem.add_development_dependency 'sqlite3-ruby'
+    gem.add_development_dependency "activerecord", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
