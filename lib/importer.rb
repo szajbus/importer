@@ -1,3 +1,7 @@
+require 'active_record'
+
+require 'importer/import'
+require 'importer/imported_object'
 require 'importer/parser'
 
 module Importer
@@ -10,14 +14,31 @@ module Importer
 
   module ClassMethods
     def import(file)
-      data = Importer::Parser.run(file)
+      import = Importer::Import.create
+      data   = Importer::Parser.run(file)
 
       data.each do |attributes|
-        object = find_on_import(attributes) || new
+        imported_object = Importer::ImportedObject.new(:import => import)
 
-        object.attributes = attributes
-        object.save
+        if object = find_on_import(attributes)
+          imported_object.state = "existing_object"
+        else
+          object                = new
+          imported_object.state = "new_object"
+        end
+
+        imported_object.data   = attributes
+        object.attributes      = attributes
+
+        unless object.save
+          imported_object.state = "invalid_object"
+        end
+
+        imported_object.object = object
+        imported_object.save
       end
+
+      import
     end
 
     def find_on_import(attributes)

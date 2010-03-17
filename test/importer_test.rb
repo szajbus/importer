@@ -22,6 +22,8 @@ class ImporterTest < Test::Unit::TestCase
         assert_equal 114, product.price
         assert_equal "2", product.customid
       end
+
+      should_change("imported objects counts", :by => 3) { Importer::ImportedObject.count }
     end
   end
 end
