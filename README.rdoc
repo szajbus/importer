@@ -4,6 +4,22 @@ Import objects from XML files
 
 Define new objects or modifications of existing ones in XML file and import them to your application.
 
+== Installation
+
+Install the plugin, generate the migrations and run them.
+
+  script/plugin install git://github.com/szajbus/importer.git
+  script/generate importer import
+  rake db:migrate
+
+Add to your model
+
+  include Importer
+
+And start importing
+
+  Product.import(path_to_xml_file)
+
 == Note on Patches/Pull Requests
 
 * Fork the project.
