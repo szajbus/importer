@@ -13,8 +13,8 @@ module Importer
   end
 
   module ClassMethods
-    def import(file)
-      import = Importer::Import.create
+    def import(file, import_options = {})
+      import = Importer::Import.create(import_options)
       data   = Importer::Parser.run(file)
 
       data.each do |attributes|

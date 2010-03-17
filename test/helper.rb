@@ -29,6 +29,7 @@ class Test::Unit::TestCase
       t.integer :new_objects_count,       :default => 0
       t.integer :existing_objects_count,  :default => 0
       t.integer :invalid_objects_count,   :default => 0
+      t.integer :shop_id
     end
 
     ActiveRecord::Base.connection.create_table :imported_objects, { :force => true } do |t|
