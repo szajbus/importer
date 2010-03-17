@@ -11,6 +11,7 @@ module Importer
     after_destroy :decrement_counter
 
     serialize :data
+    serialize :validation_errors
 
     protected
 

@@ -36,6 +36,7 @@ class Test::Unit::TestCase
       t.string  :object_type
       t.integer :object_id
       t.string  :data
+      t.string  :validation_errors
       t.string  :state
     end
   end

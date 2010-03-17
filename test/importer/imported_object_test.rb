@@ -22,11 +22,16 @@ class Importer::ImportedObjectTest < Test::Unit::TestCase
   end
 
   context "creating new imported object" do
-    setup { @imported_object = Factory(:imported_object, :data => { "a" => "b" }) }
+    setup { @imported_object = Factory(:imported_object, :data => { "a" => "b" }, :validation_errors => { "c" => "d" }) }
 
     should "serialize it's data" do
       data = { "a" => "b" }
       assert_equal data, @imported_object.data
+    end
+
+    should "serialize it's validation errors" do
+      validation_errors = { "c" => "d" }
+      assert_equal validation_errors, @imported_object.validation_errors
     end
   end
 end

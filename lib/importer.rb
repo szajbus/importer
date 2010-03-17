@@ -31,7 +31,8 @@ module Importer
         object.attributes      = attributes
 
         unless object.save
-          imported_object.state = "invalid_object"
+          imported_object.state             = "invalid_object"
+          imported_object.validation_errors = object.errors.full_messages
         end
 
         imported_object.object = object
