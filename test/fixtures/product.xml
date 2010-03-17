@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<products>
+  <product>
+    <customid>1</customid>
+    <name>A black ball</name>
+    <description>Round glass ball.</description>
+    <price>86.00</price>
+  </product>
+</products>

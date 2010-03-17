@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<products>
+  <product>
+    <customid>1</customid>
+    <name>A black ball</name>
+    <description>Round glass ball.</description>
+    <price>86.00</price>
+  </product>
+  <product>
+    <customid>2</customid>
+    <name>A red hat</name>
+    <description>Party hat.</description>
+    <price>114.00</price>
+  </product>
+  <product>
+    <customid>3</customid>
+    <name>A white ribbon</name>
+    <description>A really long one.</description>
+    <price>oops</price>
+  </product>
+</products>
