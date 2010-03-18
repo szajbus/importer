@@ -28,5 +28,23 @@ class ImporterTest < Test::Unit::TestCase
 
       should_change("import's workflow state", :to => "finished") { @import.reload.workflow_state }
     end
+
+    context "when there is exception raised while importing from an XML file" do
+      setup do
+        begin
+          InvalidProduct.import(fixture_file("products.xml"), :import => @import)
+        rescue ::Exception => e
+          @exception = e
+        end
+      end
+
+      should_not_change("product's name") { @product.reload.name }
+      should_not_change("products count") { InvalidProduct.count }
+      should_not_change("imported objects count") { Importer::ImportedObject.count }
+      should_not_change("import's workflow state") { @import.reload.workflow_state }
+      should "propagate exception" do
+        assert_equal "An error occured.", @exception.message
+      end
+    end
   end
 end

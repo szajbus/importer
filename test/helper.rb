@@ -57,3 +57,15 @@ class Product < ActiveRecord::Base
     find_by_customid(attributes["customid"])
   end
 end
+
+class InvalidProduct < Product
+  set_table_name "products"
+
+  def self.find_on_import(import, attributes)
+    if attributes["customid"] == "3"
+      raise ::Exception.new("An error occured.")
+    else
+      super
+    end
+  end
+end

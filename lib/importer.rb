@@ -19,31 +19,34 @@ module Importer
       parser = options[:parser] || Importer::Parser
       data   = parser.run(file)
 
-      import.start!
+      transaction do
+        import.start!
 
-      data.each do |attributes|
-        imported_object = Importer::ImportedObject.new(:import => import)
+        data.each do |attributes|
+          imported_object = Importer::ImportedObject.new(:import => import)
 
-        if object = find_on_import(import, attributes)
-          imported_object.state = "existing_object"
-        else
-          object                = new
-          imported_object.state = "new_object"
+          if object = find_on_import(import, attributes)
+            imported_object.state = "existing_object"
+          else
+            object                = new
+            imported_object.state = "new_object"
+          end
+
+          imported_object.data = attributes
+          object.merge_attributes_on_import(import, attributes)
+
+          unless object.save
+            imported_object.state             = "invalid_object"
+            imported_object.validation_errors = object.errors.full_messages
+          end
+
+          imported_object.object = object
+          imported_object.save
         end
 
-        imported_object.data = attributes
-        object.merge_attributes_on_import(import, attributes)
-
-        unless object.save
-          imported_object.state             = "invalid_object"
-          imported_object.validation_errors = object.errors.full_messages
-        end
-
-        imported_object.object = object
-        imported_object.save
+        import.finish!
       end
 
-      import.finish!
       import
     end
 
