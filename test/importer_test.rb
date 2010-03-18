@@ -1,14 +1,15 @@
 require 'helper'
 
 class ImporterTest < Test::Unit::TestCase
-  context "given an existing product" do
+  context "" do
     setup do
       @product = Factory(:product, :customid => "1", :name => "A pink ball", :description => "Round glass ball.", :price => 86)
+      @import = Importer::Import.create
     end
 
     context "importing from an XML file" do
       setup do
-        Product.import(fixture_file("products.xml"))
+        Product.import(fixture_file("products.xml"), :import => @import)
       end
 
       should_change("product's name", :from => "A pink ball", :to => "A black ball") { @product.reload.name }
@@ -25,7 +26,7 @@ class ImporterTest < Test::Unit::TestCase
 
       should_change("imported objects counts", :by => 3) { Importer::ImportedObject.count }
 
-      should_change("import's count", :by => 1) { Importer::Import.count }
+      should_change("import's workflow state", :to => "finished") { @import.reload.workflow_state }
     end
   end
 end

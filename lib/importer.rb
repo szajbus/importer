@@ -19,6 +19,8 @@ module Importer
       parser = options[:parser] || Importer::Parser
       data   = parser.run(file)
 
+      import.start!
+
       data.each do |attributes|
         imported_object = Importer::ImportedObject.new(:import => import)
 
@@ -41,6 +43,7 @@ module Importer
         imported_object.save
       end
 
+      import.finish!
       import
     end
 
