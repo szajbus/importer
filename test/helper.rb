@@ -53,7 +53,7 @@ class Product < ActiveRecord::Base
 
   validates_numericality_of :price
 
-  def self.find_on_import(attributes)
+  def self.find_on_import(import, attributes)
     find_by_customid(attributes["customid"])
   end
 end

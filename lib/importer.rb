@@ -24,7 +24,7 @@ module Importer
       data.each do |attributes|
         imported_object = Importer::ImportedObject.new(:import => import)
 
-        if object = find_on_import(attributes)
+        if object = find_on_import(import, attributes)
           imported_object.state = "existing_object"
         else
           object                = new
@@ -32,7 +32,7 @@ module Importer
         end
 
         imported_object.data = attributes
-        object.merge_attributes_on_import(attributes)
+        object.merge_attributes_on_import(import, attributes)
 
         unless object.save
           imported_object.state             = "invalid_object"
@@ -47,13 +47,13 @@ module Importer
       import
     end
 
-    def find_on_import(attributes)
+    def find_on_import(import, attributes)
       find_by_id(attributes["id"])
     end
   end
 
   module InstanceMethods
-    def merge_attributes_on_import(attributes)
+    def merge_attributes_on_import(import, attributes)
       self.attributes = attributes
     end
   end
