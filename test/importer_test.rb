@@ -8,7 +8,7 @@ class ImporterTest < Test::Unit::TestCase
 
     context "importing from an XML file" do
       setup do
-        Product.import(fixture_file("products.xml"), :shop_id => 1)
+        Product.import(fixture_file("products.xml"))
       end
 
       should_change("product's name", :from => "A pink ball", :to => "A black ball") { @product.reload.name }
@@ -26,9 +26,6 @@ class ImporterTest < Test::Unit::TestCase
       should_change("imported objects counts", :by => 3) { Importer::ImportedObject.count }
 
       should_change("import's count", :by => 1) { Importer::Import.count }
-      should "create new import with correct options" do
-        assert_equal 1, Importer::Import.last.shop_id
-      end
     end
   end
 end
