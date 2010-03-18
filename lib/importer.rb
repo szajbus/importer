@@ -8,6 +8,7 @@ module Importer
 
   class << self
     def included(base)
+      base.send(:include, Importer::InstanceMethods)
       base.send(:extend,  Importer::ClassMethods)
     end
   end
@@ -28,8 +29,8 @@ module Importer
           imported_object.state = "new_object"
         end
 
-        imported_object.data   = attributes
-        object.attributes      = attributes
+        imported_object.data = attributes
+        object.merge_attributes_on_import(attributes)
 
         unless object.save
           imported_object.state             = "invalid_object"
@@ -45,6 +46,12 @@ module Importer
 
     def find_on_import(attributes)
       find_by_id(attributes["id"])
+    end
+  end
+
+  module InstanceMethods
+    def merge_attributes_on_import(attributes)
+      self.attributes = attributes
     end
   end
 end
