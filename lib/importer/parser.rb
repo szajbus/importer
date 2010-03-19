@@ -1,35 +1,20 @@
-require 'crack/xml'
-
 module Importer
-  class Parser
+  class ParserNotFoundError < ::Exception; end
 
-    class << self
-      def run(file)
-        parser = new(file)
-        parser.run
-        parser.data
+  module Parser
+    def self.get_klass(file)
+      extension = File.extname(file)[1..-1]
+
+      if extension
+        klass = extension.camelize
+
+        if Importer::Parser.const_defined?(klass.to_sym)
+          klass = "Importer::Parser::#{klass}".constantize
+          return klass
+        end
       end
-    end
 
-    attr_reader :data
-
-    def initialize(file)
-      @file = file
-      @data = []
-    end
-
-    def run
-      @data = []
-
-      file = File.new(@file)
-      data = Crack::XML.parse(file)
-
-      root = data.shift[1]
-
-      if root
-        objects = root.shift[1]
-        @data = objects.is_a?(Hash) ? [objects] : objects
-      end
+      raise Importer::ParserNotFoundError.new("Can't find #{klass} parser.")
     end
   end
 end

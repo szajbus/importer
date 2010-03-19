@@ -12,6 +12,7 @@ begin
     gem.authors = ["Michał Szajbe"]
     gem.add_dependency "crack", ">= 0"
     gem.add_dependency "activerecord", ">= 0"
+    gem.add_dependency "activesupport", ">= 0"
     gem.add_dependency "workflow", ">= 0"
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
     gem.add_development_dependency "factory_girl", ">= 0"

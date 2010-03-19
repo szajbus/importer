@@ -1,8 +1,11 @@
 require 'active_record'
+require 'active_support'
 
 require 'importer/import'
 require 'importer/imported_object'
 require 'importer/parser'
+require 'importer/parser/base'
+require 'importer/parser/xml'
 
 module Importer
 
@@ -16,7 +19,7 @@ module Importer
   module ClassMethods
     def import(file, options = {})
       import = options[:import] || Importer::Import.create
-      parser = options[:parser] || Importer::Parser
+      parser = options[:parser] || Importer::Parser.get_klass(file)
       data   = parser.run(file)
 
       transaction do
