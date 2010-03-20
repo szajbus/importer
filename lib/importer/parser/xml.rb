@@ -1,5 +1,7 @@
 require 'crack/xml'
 
+# XML parser
+# It uses crack/xml lib to parse the files.
 module Importer
   module Parser
     class Xml < Base

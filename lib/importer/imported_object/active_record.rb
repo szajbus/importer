@@ -2,6 +2,15 @@ require 'active_record'
 
 module Importer
   module ImportedObject
+    # ActiveRecord model that stores detailed information of imported objects in
+    # imported_objects database table.
+    #
+    # belongs_to :import - reference to import instance
+    # belongs_to :object - reference to imported object
+    #
+    # Attributes:
+    # * +data+ - object's detected attributes hash
+    # * +validation_errors+ - object's validation errors hash.
     class ActiveRecord < ::ActiveRecord::Base
       set_table_name "imported_objects"
 

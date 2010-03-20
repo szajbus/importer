@@ -1,5 +1,7 @@
 require 'fastercsv'
 
+# CSV parser
+# It uses fastercsv lib to parse the files.
 module Importer
   module Parser
     class Csv < Base

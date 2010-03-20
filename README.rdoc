@@ -1,24 +1,59 @@
 = importer
 
-Import objects from XML files
+Importer is a tool to help you with importing objects to your database from various sources.
 
-Define new objects or modifications of existing ones in XML file and import them to your application.
+=== Links
+
+Repository: http://github.com/szajbus/importer
+
+Docs: http://rdoc.info/projects/szajbus/importer
+
+== Main features:
+
+* can import from XML and CSV formats, but it's possible to add custom parsers
+* reports how many new objects got imported, how many objects was modified and how many objects were invalid
+* can save reports to the database, along with errors for later inspection
 
 == Installation
 
-Install the plugin, generate the migrations and run them.
+Install the gem
+
+  gem install importer
+
+Or the plugin
 
   script/plugin install git://github.com/szajbus/importer.git
+
+Generate the migrations and run them (this step may not be necessary, read below)
+
   script/generate importer import
   rake db:migrate
 
 Add to your model
 
-  include Importer
+  class Product < ActiveRecord::Base
+    include Importer
+  end
 
 And start importing
 
-  Product.import(path_to_xml_file)
+  Product.import(path_to_xml_or_csv_file)
+
+This will parse the file and import all products there are defined in it. Import summary will be saved in imports table, it will tell you how many products were created, modified or invalid. Exact information about each product (detected attributes and errors) will be saved in imported_objects table.
+
+If you don't want to save summaries to database you can force the importer to do a simple import with:
+
+  Product.import(path_to_xml_or_csv_file, :import => Importer::Import::Simple.create)
+
+== Customization
+
+You can create your own parser to import from sources other than XML or CSV files. Check the implementation of one of existing parsers to find out how to write your own. Then just pass parser class to import method:
+
+  Product.import(path_to_xml_or_csv_file, :parser => YourCustomParser)
+
+You can also create your custom Import and ImportedObject classes if you need the import summaries in other way than those currently offered (ActiveRecord which stores summaries in database and Simple which does not store them at all). Again check the current implementations to get the idea. To force the importer to use it:
+
+  Product.import(path_to_xml_or_csv_file, :import => YourCustomImport.new)
 
 == Note on Patches/Pull Requests
 
@@ -32,4 +67,4 @@ And start importing
 
 == Copyright
 
-Copyright (c) 2010 Michał Szajbe. See LICENSE for details.
+Copyright (c) 2010 Michal Szajbe. See LICENSE for details.

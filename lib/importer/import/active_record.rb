@@ -3,6 +3,15 @@ require 'workflow'
 
 module Importer
   module Import
+    # ActiveRecord model that stores import summaries in imports database table.
+    # has_many :+imported_objects+
+    #
+    # Attributes:
+    # * +new_objects_count+ - number of new objects created during the import
+    # * +existing_objects_count+ - number of objects modified during the import
+    # * +invalid_objects_count+ - number of objects that couldn't have been imported
+    # * +workflow_state+ - import may be in one of three states: ready, started or
+    #   finished. The state changes during the import process.
     class ActiveRecord < ::ActiveRecord::Base
       set_table_name "imports"
 

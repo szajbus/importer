@@ -1,5 +1,13 @@
 module Importer
   module Import
+    # Simple import summary. It's not stored in database (as with +ActiveRecord+ import).
+    #
+    # Attributes:
+    # * +new_objects_count+ - number of new objects created during the import
+    # * +existing_objects_count+ - number of objects modified during the import
+    # * +invalid_objects_count+ - number of objects that couldn't have been imported
+    # * +workflow_state+ - import may be in one of three states: ready, started or
+    #   finished. The state changes during the import process.
     class Simple
       attr_reader :state, :new_objects_count, :existing_objects_count, :invalid_objects_count, :imported_objects
 

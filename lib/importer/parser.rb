@@ -1,6 +1,8 @@
 module Importer
   class ParserNotFoundError < ::Exception; end
 
+  # Determines the parser needed to parse given +file+ basing on +file+ extension.
+  # Return Xml parser for .xml files, Csv parser for .csv file and so on.
   module Parser
     def self.get_klass(file)
       extension = File.extname(file)[1..-1]
