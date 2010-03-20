@@ -4,7 +4,7 @@ class ImporterTest < Test::Unit::TestCase
   context "" do
     setup do
       @product = Factory(:product, :customid => "1", :name => "A pink ball", :description => "Round glass ball.", :price => 86)
-      @import = Importer::Import.create
+      @import = Importer::Import::ActiveRecord.create
     end
 
     context "importing from an XML file" do
@@ -24,7 +24,7 @@ class ImporterTest < Test::Unit::TestCase
         assert_equal "2", product.customid
       end
 
-      should_change("imported objects counts", :by => 3) { Importer::ImportedObject.count }
+      should_change("imported objects counts", :by => 3) { Importer::ImportedObject::ActiveRecord.count }
 
       should_change("import's workflow state", :to => "finished") { @import.reload.workflow_state }
     end
@@ -40,7 +40,7 @@ class ImporterTest < Test::Unit::TestCase
 
       should_not_change("product's name") { @product.reload.name }
       should_not_change("products count") { InvalidProduct.count }
-      should_not_change("imported objects count") { Importer::ImportedObject.count }
+      should_not_change("imported objects count") { Importer::ImportedObject::ActiveRecord.count }
       should_not_change("import's workflow state") { @import.reload.workflow_state }
       should "propagate exception" do
         assert_equal "An error occured.", @exception.message

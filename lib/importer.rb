@@ -1,8 +1,9 @@
-require 'active_record'
 require 'active_support'
 
 require 'importer/import'
 require 'importer/imported_object'
+require 'importer/import/active_record'
+require 'importer/imported_object/active_record'
 require 'importer/parser'
 require 'importer/parser/base'
 require 'importer/parser/csv'
@@ -19,15 +20,17 @@ module Importer
 
   module ClassMethods
     def import(file, options = {})
-      import = options[:import] || Importer::Import.create
+      import = options[:import] || Importer::Import::ActiveRecord.create
       parser = options[:parser] || Importer::Parser.get_klass(file)
       data   = parser.run(file)
 
       transaction do
         import.start!
 
+        imported_object_klass = Importer::ImportedObject.get_klass(import)
+
         data.each do |attributes|
-          imported_object = Importer::ImportedObject.new(:import => import)
+          imported_object = imported_object_klass.new(:import => import)
 
           if object = find_on_import(import, attributes)
             imported_object.state = "existing_object"

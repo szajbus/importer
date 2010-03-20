@@ -1,6 +1,6 @@
 require 'helper'
 
-class Importer::ImportTest < Test::Unit::TestCase
+class Importer::Import::ActiveRecordTest < Test::Unit::TestCase
   context "" do
     setup do
       @product = Factory(:product, :customid => "1", :name => "A pink ball", :description => "Round glass ball.", :price => 86)

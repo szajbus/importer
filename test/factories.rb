@@ -1,7 +1,7 @@
-Factory.define :import, :class => Importer::Import do |f|
+Factory.define :active_record_import, :class => Importer::Import::ActiveRecord do |f|
 end
 
-Factory.define :imported_object, :class => Importer::ImportedObject do |f|
+Factory.define :active_record_imported_object, :class => Importer::ImportedObject::ActiveRecord do |f|
 end
 
 Factory.define :product do |f|
