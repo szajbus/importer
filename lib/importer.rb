@@ -5,6 +5,7 @@ require 'importer/import'
 require 'importer/imported_object'
 require 'importer/parser'
 require 'importer/parser/base'
+require 'importer/parser/csv'
 require 'importer/parser/xml'
 
 module Importer
