@@ -4,5 +4,8 @@ end
 Factory.define :active_record_imported_object, :class => Importer::ImportedObject::ActiveRecord do |f|
 end
 
+Factory.define :simple_import, :class => Importer::Import::Simple do |f|
+end
+
 Factory.define :product do |f|
 end
