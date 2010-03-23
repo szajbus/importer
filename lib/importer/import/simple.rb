@@ -52,6 +52,10 @@ module Importer
       end
 
       alias_method :save!, :save
+
+      def build_imported_object
+        Importer::ImportedObject::Simple.new(:import => self)
+      end
     end
   end
 end

@@ -32,6 +32,10 @@ module Importer
       named_scope :finished, :conditions => { :workflow_state => "finished" }
 
       has_many :imported_objects, :class_name => "Importer::ImportedObject::ActiveRecord"
+
+      def build_imported_object
+        imported_objects.build(:import => self)
+      end
     end
   end
 end

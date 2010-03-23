@@ -53,10 +53,8 @@ module Importer
       transaction do
         import.start!
 
-        imported_object_klass = Importer::ImportedObject.get_klass(import)
-
         data.each do |attributes|
-          imported_object = imported_object_klass.new(:import => import)
+          imported_object = import.build_imported_object
 
           if object = find_on_import(import, attributes)
             imported_object.state = "existing_object"

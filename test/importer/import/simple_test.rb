@@ -24,4 +24,13 @@ class Importer::Import::SimpleTest < Test::Unit::TestCase
       end
     end
   end
+
+  context "an import" do
+    setup { @import = Factory(:simple_import) }
+
+    should "correctly build imported object" do
+      imported_object = @import.build_imported_object
+      assert_equal @import, imported_object.import
+    end
+  end
 end
