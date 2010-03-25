@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{importer}
-  s.version = "0.3.1"
+  s.version = "0.3.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Micha\305\202 Szajbe"]
-  s.date = %q{2010-03-23}
+  s.date = %q{2010-03-25}
   s.description = %q{Define new objects or modifications of existing ones in XML file and import them to your application.}
   s.email = %q{michal.szajbe@gmail.com}
   s.extra_rdoc_files = [
