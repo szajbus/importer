@@ -1,46 +1,19 @@
 require 'rubygems'
 require 'test/unit'
 require 'shoulda'
+require 'rr'
+require 'active_record'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
+
 require 'importer'
 
 config = YAML::load(IO.read(File.join(File.dirname(__FILE__), 'database.yml')))
 ActiveRecord::Base.establish_connection(config['test'])
 
-require 'factory_girl'
-require 'factories'
-
 class Test::Unit::TestCase
-  def setup
-    reset_tables
-  end
-
-  def reset_tables
-    ActiveRecord::Base.connection.create_table :products, { :force => true } do |t|
-      t.string  :customid
-      t.string  :name
-      t.string  :description
-      t.decimal :price
-    end
-
-    ActiveRecord::Base.connection.create_table :imports, { :force => true } do |t|
-      t.integer :new_objects_count,       :default => 0
-      t.integer :existing_objects_count,  :default => 0
-      t.integer :invalid_objects_count,   :default => 0
-      t.string  :workflow_state,          :default => "ready"
-    end
-
-    ActiveRecord::Base.connection.create_table :imported_objects, { :force => true } do |t|
-      t.integer :import_id
-      t.string  :object_type
-      t.integer :object_id
-      t.string  :data
-      t.string  :validation_errors
-      t.string  :state
-    end
-  end
+  include RR::Adapters::TestUnit
 
   # return path to a fixture file from test/fixtures dir
   def fixture_file(file)
@@ -48,24 +21,13 @@ class Test::Unit::TestCase
   end
 end
 
-class Product < ActiveRecord::Base
-  include Importer
-
-  validates_numericality_of :price
-
-  def self.find_on_import(import, attributes)
-    find_by_customid(attributes["customid"])
-  end
+def def_class(class_name, parent_class = Object, &blk)
+  undef_class(class_name)
+  klass = Object.const_set(class_name, Class.new(parent_class))
+  klass.module_eval(&blk)
+  klass
 end
 
-class InvalidProduct < Product
-  set_table_name "products"
-
-  def self.find_on_import(import, attributes)
-    if attributes["customid"] == "3"
-      raise ::Exception.new("An error occured.")
-    else
-      super
-    end
-  end
+def undef_class(class_name)
+  Object.send(:remove_const, class_name) rescue nil
 end

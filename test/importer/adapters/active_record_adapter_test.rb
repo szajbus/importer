@@ -1,15 +1,45 @@
 require 'helper'
 
 class Importer::Adapters::ActiveRecordAdapterTest < Test::Unit::TestCase
-  context "" do
-    setup do
-      @product = Factory(:product, :customid => "1", :name => "A pink ball", :description => "Round glass ball.", :price => 86)
-      @import = Importer::Import::ActiveRecord.create
+  def setup
+    ActiveRecord::Base.connection.create_table :products, { :force => true } do |t|
+      t.string  :customid
+      t.string  :name
+      t.string  :description
+      t.decimal :price
     end
 
-    context "importing from an XML file" do
+    def_class("Product", ActiveRecord::Base) do
+      include Importer
+
+      validates_numericality_of :price
+
+      def self.find_on_import(import, attributes)
+        find_by_customid(attributes["customid"])
+      end
+    end
+  end
+
+  def teardown
+    undef_class("Product")
+  end
+
+  context "" do
+    setup do
+      @product = Product.create(:customid => "1", :name => "A pink ball", :description => "Round glass ball.", :price => 86)
+    end
+
+    context "importing objects" do
       setup do
-        Product.import(fixture_file("products.xml"), :import => @import)
+        @new_object      = { "name" => "A red hat", "customid"=>"2", "price" => "114.00", "description" => "Party hat." }
+        @existing_object = { "name" => "A black ball", "customid"=>"1", "price" => "86.00", "description" => "Round glass ball." }
+        @invalid_object  = { "name" => "A white ribbon", "customid"=>"3", "price" => "oops", "description" => "A really long one." }
+
+        data = [ @new_object, @existing_object, @invalid_object ]
+
+        stub(Importer::Parser::Xml).run(fixture_file("products.xml")) { data }
+
+        @import = Product.import(fixture_file("products.xml"))
       end
 
       should_change("product's name", :from => "A pink ball", :to => "A black ball") { @product.reload.name }
@@ -24,24 +54,58 @@ class Importer::Adapters::ActiveRecordAdapterTest < Test::Unit::TestCase
         assert_equal "2", product.customid
       end
 
-      should_change("imported objects counts", :by => 3) { Importer::ImportedObject::ActiveRecord.count }
+      should "correctly summarize the import process" do
+        assert_equal 1, @import.new_imported_objects.size
+        assert_equal 1, @import.existing_imported_objects.size
+        assert_equal 1, @import.invalid_imported_objects.size
+      end
 
-      should_change("import's workflow state", :to => "finished") { @import.reload.workflow_state }
+      should "correctly build imported objects" do
+        new_object      = @import.new_imported_objects.first
+        existing_object = @import.existing_imported_objects.first
+        invalid_object  = @import.invalid_imported_objects.first
+
+        assert_equal @new_object,       new_object.data
+        assert_equal 'new_object',      new_object.state
+        assert_equal Product.last,      new_object.object
+
+        assert_equal @existing_object,  existing_object.data
+        assert_equal 'existing_object', existing_object.state
+        assert_equal @product,          existing_object.object
+
+        assert_equal @invalid_object,   invalid_object.data
+        assert_equal 'invalid_object',  invalid_object.state
+        assert_equal ["Price is not a number"], invalid_object.validation_errors
+      end
     end
 
-    context "when there is exception raised while importing from an XML file" do
+    context "when there is exception during import process" do
       setup do
+        def_class("InvalidProduct", Product) do
+          set_table_name "products"
+
+          def self.find_on_import(import, attributes)
+            if attributes["customid"] == "3"
+              raise ::Exception.new("An error occured.")
+            else
+              super
+            end
+          end
+        end
+
         begin
-          InvalidProduct.import(fixture_file("products.xml"), :import => @import)
+          InvalidProduct.import(fixture_file("products.xml"))
         rescue ::Exception => e
           @exception = e
         end
       end
 
+      def teardown
+        undef_class("InvalidProduct")
+      end
+
       should_not_change("product's name") { @product.reload.name }
       should_not_change("products count") { InvalidProduct.count }
-      should_not_change("imported objects count") { Importer::ImportedObject::ActiveRecord.count }
-      should_not_change("import's workflow state") { @import.reload.workflow_state }
       should "propagate exception" do
         assert_equal "An error occured.", @exception.message
       end

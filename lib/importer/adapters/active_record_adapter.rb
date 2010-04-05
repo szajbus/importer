@@ -42,13 +42,11 @@ module Importer
         # * +import+ - by default importer tries to store import summary in database, so it uses
         #   ActiveRecord import, to use other import type pass it's instance here
         def import(file, options = {})
-          import = options[:import] || Importer::Import::ActiveRecord.create
-          parser = options[:parser] || Importer::Parser.get_klass(file)
+          import = (options[:import] || Importer::Import).new
+          parser =  options[:parser] || Importer::Parser.get_klass(file)
           data   = parser.run(file)
 
           transaction do
-            import.start!
-
             data.each do |attributes|
               imported_object = import.build_imported_object
 
@@ -68,10 +66,9 @@ module Importer
               end
 
               imported_object.object = object
-              imported_object.save
-            end
 
-            import.finish!
+              import.add_object(imported_object)
+            end
           end
 
           import
