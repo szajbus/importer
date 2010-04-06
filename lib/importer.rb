@@ -1,5 +1,3 @@
-require 'active_support'
-
 require 'importer/adapters/active_record_adapter'
 require 'importer/import'
 require 'importer/imported_object'

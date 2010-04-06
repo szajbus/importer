@@ -5,18 +5,15 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "importer"
-    gem.summary = %Q{Import objects from XML files}
-    gem.description = %Q{Define new objects or modifications of existing ones in XML file and import them to your application.}
+    gem.summary = %Q{Import objects from external files}
+    gem.description = %Q{Define new objects or modifications of existing ones in external file (xml, csv, etc) and import them to your application. Importer will not only import all the objects but also will give you detailed summary of the import process.}
     gem.email = "michal.szajbe@gmail.com"
     gem.homepage = "http://github.com/szajbus/importer"
     gem.authors = ["Michał Szajbe"]
-    gem.add_dependency "crack", ">= 0"
-    gem.add_dependency "fastercsv", ">= 0"
-    gem.add_dependency "activerecord", ">= 0"
-    gem.add_dependency "activesupport", ">= 0"
-    gem.add_dependency "workflow", ">= 0"
+    gem.add_dependency "crack", ">= 0.1.6"
+    gem.add_dependency "fastercsv", ">= 1.5.0"
+    gem.add_development_dependency "activerecord", ">= 0"
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
-    gem.add_development_dependency "factory_girl", ">= 0"
     gem.add_development_dependency 'sqlite3-ruby'
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
