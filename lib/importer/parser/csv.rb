@@ -1,9 +1,9 @@
 require 'fastercsv'
 
-# CSV parser
-# It uses fastercsv lib to parse the files.
 module Importer
   module Parser
+    # CSV parser
+    # Uses fastercsv lib to parse the CSV files.
     class Csv < Base
       def run
         @data = []

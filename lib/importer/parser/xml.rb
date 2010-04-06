@@ -1,9 +1,9 @@
 require 'crack/xml'
 
-# XML parser
-# It uses crack/xml lib to parse the files.
 module Importer
   module Parser
+    # XML parser
+    # Uses crack/xml lib to parse the XML files.
     class Xml < Base
       def run
         @data = []

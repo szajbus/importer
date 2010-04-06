@@ -5,6 +5,14 @@ module Importer
   #
   # The importer builds it's Import instance by adding imported objects via
   # +add_object+.
+  #
+  # If you want to have your own implementation of Import summary
+  # (f.e. activerecord-based), you can force the importer to use it with:
+  #
+  #    Product.import(path_to_xml_or_csv_file, :import => CustomImportClass)
+  #
+  # Just be sure to implement +add_object+ and +build_imported_object+
+  # methods in your custom class.
   class Import
     attr_reader :imported_objects
 

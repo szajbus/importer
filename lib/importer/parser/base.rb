@@ -2,6 +2,10 @@ module Importer
   module Parser
     # Extend this class if you want to provide a custom parser.
     # You only need to implement +run+ instance method in subclasses.
+    #
+    # To force the importer to use your custom parser use:
+    #
+    #    Product.import(file, :parser => CustomParserClass)
     class Base
 
       class << self

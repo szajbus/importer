@@ -12,7 +12,6 @@ Docs: http://rdoc.info/projects/szajbus/importer
 
 * can import from XML and CSV formats, but it's possible to add custom parsers
 * reports how many new objects got imported, how many objects was modified and how many objects were invalid
-* can save reports to the database, along with errors for later inspection
 
 == Installation
 
@@ -24,11 +23,6 @@ Or the plugin
 
   script/plugin install git://github.com/szajbus/importer.git
 
-Generate the migrations and run them (this step may not be necessary, read below)
-
-  script/generate importer import
-  rake db:migrate
-
 Add to your model
 
   class Product < ActiveRecord::Base
@@ -39,21 +33,17 @@ And start importing
 
   Product.import(path_to_xml_or_csv_file)
 
-This will parse the file and import all products there are defined in it. Import summary will be saved in imports table, it will tell you how many products were created, modified or invalid. Exact information about each product (detected attributes and errors) will be saved in imported_objects table.
-
-If you don't want to save summaries to database you can force the importer to do a simple import with:
-
-  Product.import(path_to_xml_or_csv_file, :import => Importer::Import::Simple.create)
+This will parse the file and import all products there are defined in it. This will return import summary which will tell you how many products were created, modified or invalid. Exact information about each product (detected attributes and errors) will be available in summary too.
 
 == Customization
 
 You can create your own parser to import from sources other than XML or CSV files. Check the implementation of one of existing parsers to find out how to write your own. Then just pass parser class to import method:
 
-  Product.import(path_to_xml_or_csv_file, :parser => YourCustomParser)
+  Product.import(path_to_file, :parser => CustomParserClass)
 
-You can also create your custom Import and ImportedObject classes if you need the import summaries in other way than those currently offered (ActiveRecord which stores summaries in database and Simple which does not store them at all). Again check the current implementations to get the idea. To force the importer to use it:
+You can also create your custom versions of Import and ImportedObject classes. A possible alternative version could be ActiveRecord Import and ImportedObject models that would save import summary to database for later inspection. Check the rdocs for these classes for more information. You force the importer to use a custom Import class with:
 
-  Product.import(path_to_xml_or_csv_file, :import => YourCustomImport.new)
+  Product.import(path_to_file, :import => CustomImportClass)
 
 == Note on Patches/Pull Requests
 
@@ -64,6 +54,12 @@ You can also create your custom Import and ImportedObject classes if you need th
 * Commit, do not mess with rakefile, version, or history.
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
+
+== Disclaimer
+
+Importer gem/plugin was extracted from an actual Ruby on Rails application. It probably lacks some features or needs some polishing. Feel free to contribute.
+
+The gem is still under development, backward compatibility can not be guaranteed (at least until it reaches 1.0 stable version).
 
 == Copyright
 

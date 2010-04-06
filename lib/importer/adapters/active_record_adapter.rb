@@ -39,8 +39,9 @@ module Importer
         # Possible options:
         # * +parser+ - by default the parser is determined from file extension, but you can force
         #   the imported to use another one by passing it's class here
-        # * +import+ - by default importer tries to store import summary in database, so it uses
-        #   ActiveRecord import, to use other import type pass it's instance here
+        # * +import+ - by default importer returns instance of +Import+ class that contains
+        #   detailed report of import process, you can implement your own Import class and force
+        #   the importer to use it by passing it's class here
         def import(file, options = {})
           import = (options[:import] || Importer::Import).new
           parser =  options[:parser] || Importer::Parser.get_klass(file)

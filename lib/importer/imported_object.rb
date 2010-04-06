@@ -14,6 +14,11 @@ module Importer
   # * +validation_errors+ - list of validation errors for invalid object
   #
   # Instances of this class are built via Import's +build_imported_object+ method.
+  #
+  # If you need you can implement your own version of ImportedObject class
+  # (f.e. activerecord-based). To use it you must also implement custom version of
+  # +Import+ class that builds instances of CustomImportedObject with it's
+  # +build_imported_object+ method.
   class ImportedObject
     attr_accessor :state, :object, :data, :validation_errors
 
