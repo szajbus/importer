@@ -13,6 +13,7 @@ begin
     gem.add_dependency "crack", ">= 0.1.6"
     gem.add_dependency "fastercsv", ">= 1.5.0"
     gem.add_development_dependency "activerecord", ">= 0"
+    gem.add_development_dependency "mongo_mapper", ">= 0.7.0"
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
     gem.add_development_dependency 'sqlite3-ruby'
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings

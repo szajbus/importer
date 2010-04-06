@@ -1,0 +1,115 @@
+require 'helper'
+
+class Importer::Adapters::MongoMapperAdapterTest < Test::Unit::TestCase
+  def setup
+    def_class("Product") do
+      include MongoMapper::Document
+      include Importer
+
+      key :customid,    String
+      key :name,        String
+      key :description, String
+      key :price,       Float
+
+      validates_numericality_of :price
+
+      def self.find_on_import(import, attributes)
+        find_by_customid(attributes["customid"])
+      end
+    end
+  end
+
+  def teardown
+    MongoMapper.database.drop_collection("products")
+    undef_class("Product")
+  end
+
+  context "" do
+    setup do
+      @product = Product.create(:customid => "1", :name => "A pink ball", :description => "Round glass ball.", :price => 86)
+    end
+
+    context "importing objects" do
+      setup do
+        @new_object      = { "name" => "A red hat", "customid"=>"2", "price" => "114.00", "description" => "Party hat." }
+        @existing_object = { "name" => "A black ball", "customid"=>"1", "price" => "86.00", "description" => "Round glass ball." }
+        @invalid_object  = { "name" => "A white ribbon", "customid"=>"3", "price" => "oops", "description" => "A really long one." }
+
+        data = [ @new_object, @existing_object, @invalid_object ]
+
+        stub(Importer::Parser::Xml).run(fixture_file("products.xml")) { data }
+
+        @import = Product.import(fixture_file("products.xml"))
+      end
+
+      should_change("product's name", :from => "A pink ball", :to => "A black ball") { @product.reload.name }
+
+      should_change("products count", :by => 1) { Product.count }
+      should "correctly create new product" do
+        product = Product.find_by_customid("2")
+
+        assert_equal "A red hat", product.name
+        assert_equal "Party hat.", product.description
+        assert_equal 114, product.price
+        assert_equal "2", product.customid
+      end
+
+      should "correctly summarize the import process" do
+        assert_equal 1, @import.new_imported_objects.size
+        assert_equal 1, @import.existing_imported_objects.size
+        assert_equal 1, @import.invalid_imported_objects.size
+      end
+
+      should "correctly build imported objects" do
+        new_object      = @import.new_imported_objects.first
+        existing_object = @import.existing_imported_objects.first
+        invalid_object  = @import.invalid_imported_objects.first
+
+        assert_equal @new_object,       new_object.data
+        assert_equal 'new_object',      new_object.state
+        assert_equal Product.find_by_customid("2"), new_object.object
+
+        assert_equal @existing_object,  existing_object.data
+        assert_equal 'existing_object', existing_object.state
+        assert_equal @product,          existing_object.object
+
+        assert_equal @invalid_object,   invalid_object.data
+        assert_equal 'invalid_object',  invalid_object.state
+        assert_equal ["Price must be a number"], invalid_object.validation_errors
+      end
+    end
+
+    context "when there is exception during import process" do
+      setup do
+        def_class("InvalidProduct", Product) do
+          include MongoMapper::Document
+          include Importer
+
+          set_collection_name "products"
+
+          def self.find_on_import(import, attributes)
+            if attributes["customid"] == "3"
+              raise ::Exception.new("An error occured.")
+            else
+              super
+            end
+          end
+        end
+
+        begin
+          InvalidProduct.import(fixture_file("products.xml"))
+        rescue ::Exception => e
+          @exception = e
+        end
+      end
+
+      def teardown
+        undef_class("InvalidProduct")
+      end
+
+      should "propagate exception" do
+        assert_equal "An error occured.", @exception.message
+      end
+    end
+  end
+end

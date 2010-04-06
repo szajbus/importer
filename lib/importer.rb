@@ -1,4 +1,5 @@
 require 'importer/adapters/active_record_adapter'
+require 'importer/adapters/mongo_mapper_adapter'
 require 'importer/import'
 require 'importer/imported_object'
 require 'importer/parser'
@@ -29,6 +30,8 @@ module Importer
     def included(base)
       if base.respond_to?(:descends_from_active_record?) && base.descends_from_active_record?
         base.send(:include, Importer::Adapters::ActiveRecordAdapter)
+      elsif defined?(MongoMapper) && (base.include?(MongoMapper::Document) || base.include?(MongoMapper::EmbeddedDocument))
+        base.send(:include, Importer::Adapters::MongoMapperAdapter)
       else
         raise AdapterError.new("Can't determine adapter for #{base.class} class.")
       end

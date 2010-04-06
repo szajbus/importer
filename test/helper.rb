@@ -3,6 +3,7 @@ require 'test/unit'
 require 'shoulda'
 require 'rr'
 require 'active_record'
+require 'mongo_mapper'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
@@ -11,6 +12,9 @@ require 'importer'
 
 config = YAML::load(IO.read(File.join(File.dirname(__FILE__), 'database.yml')))
 ActiveRecord::Base.establish_connection(config['test'])
+
+MongoMapper.connection = Mongo::Connection.new('127.0.0.1', 27017)
+MongoMapper.database = 'importer-test'
 
 class Test::Unit::TestCase
   include RR::Adapters::TestUnit

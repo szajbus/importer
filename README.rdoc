@@ -25,7 +25,14 @@ Or the plugin
 
 Add to your model
 
+  # ActiveRecord
   class Product < ActiveRecord::Base
+    include Importer
+  end
+
+  # MongoMapper
+  class Product
+    include MongoMapper::Document
     include Importer
   end
 
