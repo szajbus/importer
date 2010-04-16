@@ -52,6 +52,27 @@ You can also create your custom versions of Import and ImportedObject classes. A
 
   Product.import(path_to_file, :import => CustomImportClass)
 
+== Updating objects
+
+Importer is smart enough to figure out whether it has to create a new object or just update existing one during import. By default it's tries to find existing object by detected id attribute. If the object is found Importer updates it, otherwise a new object is created. You can change the way how existing objects are searched for by overriding your model's +find_on_import+ class method.
+
+  class Product < ActiveRecord::Base
+    include Importer
+
+    def find_on_import(import, attributes)
+      find_by_name(attributes["custom_attribute"])
+    end
+  end
+
+== Building objects
+
+The default way to build new objects or update existing ones is to merge their attributes with detected ones. To provide custom building logic override your model's +merge_attributes_on_import+ instance method.
+
+  def merge_attributes_on_import(import, attributes)
+    self.attributes  = attributes
+    self.imported_at = Time.now
+  end
+
 == Note on Patches/Pull Requests
 
 * Fork the project.
