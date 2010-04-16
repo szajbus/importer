@@ -111,4 +111,17 @@ class Importer::Adapters::ActiveRecordAdapterTest < Test::Unit::TestCase
       end
     end
   end
+
+  context "passing import_options to #import method" do
+    setup do
+      stub(Importer::Parser::Xml).run(fixture_file("empty.xml")) { [] }
+
+      @options = { :key => 'value' }
+      @import = Product.import(fixture_file("empty.xml"), :import_options => @options)
+    end
+
+    should "pass the options to Import instance" do
+      assert_equal @options, @import.options
+    end
+  end
 end

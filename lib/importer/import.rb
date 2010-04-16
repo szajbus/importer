@@ -14,10 +14,11 @@ module Importer
   # Just be sure to implement +add_object+ and +build_imported_object+
   # methods in your custom class.
   class Import
-    attr_reader :imported_objects
+    attr_reader :options, :imported_objects
 
-    def initialize
+    def initialize(options = nil)
       @imported_objects = []
+      @options          = options
     end
 
     def add_object(imported_object)

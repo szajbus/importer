@@ -42,8 +42,9 @@ module Importer
         # * +import+ - by default importer returns instance of +Import+ class that contains
         #   detailed report of import process, you can implement your own Import class and force
         #   the importer to use it by passing it's class here
+        # * +import_options+ - options passed to Import instance on it's initialization
         def import(file, options = {})
-          import = (options[:import] || Importer::Import).new
+          import = (options[:import] || Importer::Import).new(options[:import_options])
           parser =  options[:parser] || Importer::Parser.get_klass(file)
           data   = parser.run(file)
 
