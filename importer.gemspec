@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{importer}
-  s.version = "0.4.1"
+  s.version = "0.4.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Micha\305\202 Szajbe"]
-  s.date = %q{2010-04-16}
+  s.date = %q{2010-05-17}
   s.description = %q{Define new objects or modifications of existing ones in external file (xml, csv, etc) and import them to your application. Importer will not only import all the objects but also will give you detailed summary of the import process.}
   s.email = %q{michal.szajbe@gmail.com}
   s.extra_rdoc_files = [
@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
      "importer.gemspec",
      "lib/importer.rb",
      "lib/importer/adapters/active_record_adapter.rb",
+     "lib/importer/adapters/data_mapper_adapter.rb",
      "lib/importer/adapters/mongo_mapper_adapter.rb",
      "lib/importer/import.rb",
      "lib/importer/imported_object.rb",
@@ -44,6 +45,7 @@ Gem::Specification.new do |s|
      "test/fixtures/products.xml",
      "test/helper.rb",
      "test/importer/adapters/active_record_adapter_test.rb",
+     "test/importer/adapters/data_mapper_adapter_test.rb",
      "test/importer/adapters/mongo_mapper_adapter_test.rb",
      "test/importer/import_test.rb",
      "test/importer/imported_object_test.rb",
@@ -60,6 +62,7 @@ Gem::Specification.new do |s|
     "test/factories.rb",
      "test/helper.rb",
      "test/importer/adapters/active_record_adapter_test.rb",
+     "test/importer/adapters/data_mapper_adapter_test.rb",
      "test/importer/adapters/mongo_mapper_adapter_test.rb",
      "test/importer/import_test.rb",
      "test/importer/imported_object_test.rb",
@@ -77,6 +80,10 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<fastercsv>, [">= 1.5.0"])
       s.add_development_dependency(%q<activerecord>, [">= 0"])
       s.add_development_dependency(%q<mongo_mapper>, [">= 0.7.0"])
+      s.add_development_dependency(%q<dm-core>, [">= 0.10.2"])
+      s.add_development_dependency(%q<dm-validations>, [">= 0.10.2"])
+      s.add_development_dependency(%q<dm-aggregates>, [">= 0.10.2"])
+      s.add_development_dependency(%q<do_sqlite3>, [">= 0.10.1.1"])
       s.add_development_dependency(%q<thoughtbot-shoulda>, [">= 0"])
       s.add_development_dependency(%q<sqlite3-ruby>, [">= 0"])
     else
@@ -84,6 +91,10 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<fastercsv>, [">= 1.5.0"])
       s.add_dependency(%q<activerecord>, [">= 0"])
       s.add_dependency(%q<mongo_mapper>, [">= 0.7.0"])
+      s.add_dependency(%q<dm-core>, [">= 0.10.2"])
+      s.add_dependency(%q<dm-validations>, [">= 0.10.2"])
+      s.add_dependency(%q<dm-aggregates>, [">= 0.10.2"])
+      s.add_dependency(%q<do_sqlite3>, [">= 0.10.1.1"])
       s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
       s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
     end
@@ -92,6 +103,10 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<fastercsv>, [">= 1.5.0"])
     s.add_dependency(%q<activerecord>, [">= 0"])
     s.add_dependency(%q<mongo_mapper>, [">= 0.7.0"])
+    s.add_dependency(%q<dm-core>, [">= 0.10.2"])
+    s.add_dependency(%q<dm-validations>, [">= 0.10.2"])
+    s.add_dependency(%q<dm-aggregates>, [">= 0.10.2"])
+    s.add_dependency(%q<do_sqlite3>, [">= 0.10.1.1"])
     s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
     s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
   end
