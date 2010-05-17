@@ -14,6 +14,10 @@ begin
     gem.add_dependency "fastercsv", ">= 1.5.0"
     gem.add_development_dependency "activerecord", ">= 0"
     gem.add_development_dependency "mongo_mapper", ">= 0.7.0"
+    gem.add_development_dependency "dm-core", ">= 0.10.2"
+    gem.add_development_dependency "dm-validations", ">= 0.10.2"
+    gem.add_development_dependency "dm-aggregates", ">= 0.10.2"
+    gem.add_development_dependency "do_sqlite3", ">= 0.10.1.1"
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
     gem.add_development_dependency 'sqlite3-ruby'
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
