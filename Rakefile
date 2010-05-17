@@ -12,6 +12,7 @@ begin
     gem.authors = ["Michał Szajbe"]
     gem.add_dependency "crack", ">= 0.1.6"
     gem.add_dependency "fastercsv", ">= 1.5.0"
+    gem.add_dependency "activesupport", ">= 0"
     gem.add_development_dependency "activerecord", ">= 0"
     gem.add_development_dependency "mongo_mapper", ">= 0.7.0"
     gem.add_development_dependency "dm-core", ">= 0.10.2"

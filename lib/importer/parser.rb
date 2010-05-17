@@ -1,3 +1,5 @@
+require 'activesupport'
+
 module Importer
   class ParserNotFoundError < ::Exception; end
 
