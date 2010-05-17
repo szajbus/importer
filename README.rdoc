@@ -12,6 +12,7 @@ Docs: http://rdoc.info/projects/szajbus/importer
 
 * can import from XML and CSV formats, but it's possible to add custom parsers
 * reports how many new objects got imported, how many objects was modified and how many objects were invalid
+* includes ActiveRecord, DataMapper and MongoMapper adapters
 
 == Installation
 
@@ -33,6 +34,12 @@ Add to your model
   # MongoMapper
   class Product
     include MongoMapper::Document
+    include Importer
+  end
+
+  # DataMapper
+  class Product
+    include DataMapper::Resource
     include Importer
   end
 
