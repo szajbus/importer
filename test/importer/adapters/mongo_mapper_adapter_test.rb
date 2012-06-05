@@ -116,7 +116,7 @@ class Importer::Adapters::MongoMapperAdapterTest < ActiveSupport::TestCase
 
   context "passing import_options to #import method" do
     setup do
-      stub(Importer::Parser::Xml).run("empty.xml") { [] }
+      stub(Importer::Parser::Xml).run(fixture_file("empty.xml")) { [] }
 
       @options = { :key => 'value' }
       @import = Product.import(fixture_file("empty.xml"), :import_options => @options)
