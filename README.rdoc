@@ -20,9 +20,9 @@ Install the gem
 
   gem install importer
 
-Or the plugin
+To use with Ruby < 1.9
 
-  script/plugin install git://github.com/szajbus/importer.git
+  gem install importer -v "~> 0.4.0"
 
 Add to your model
 
