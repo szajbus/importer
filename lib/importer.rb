@@ -31,9 +31,9 @@ module Importer
     def included(base)
       if base.respond_to?(:descends_from_active_record?) && base.descends_from_active_record?
         base.send(:include, Importer::Adapters::ActiveRecordAdapter)
-      elsif defined?(MongoMapper) && (base.include?(MongoMapper::Document) || base.include?(MongoMapper::EmbeddedDocument))
+      elsif defined?(MongoMapper) && (base.ancestors.include?(MongoMapper::Document) || base.ancestors.include?(MongoMapper::EmbeddedDocument))
         base.send(:include, Importer::Adapters::MongoMapperAdapter)
-      elsif defined?(DataMapper) && (base.include?(DataMapper::Resource))
+      elsif defined?(DataMapper) && (base.ancestors.include?(DataMapper::Resource))
         base.send(:include, Importer::Adapters::DataMapperAdapter)
       else
         raise AdapterError.new("Can't determine adapter for #{base.class} class.")
