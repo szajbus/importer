@@ -1,9 +1,8 @@
 PATH
   remote: .
   specs:
-    importer (0.4.3)
+    importer (0.4.4)
       crack (>= 0.1.6)
-      fastercsv (>= 1.5.0)
 
 GEM
   remote: https://rubygems.org/

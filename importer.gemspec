@@ -16,7 +16,6 @@ Gem::Specification.new do |gem|
   gem.version       = Importer::VERSION
 
   gem.add_runtime_dependency "crack", ">= 0.1.6"
-  gem.add_runtime_dependency "fastercsv", ">= 1.5.0"
   gem.add_development_dependency "activerecord", "3.2.5"
   gem.add_development_dependency "mongo_mapper", "0.11.1"
   gem.add_development_dependency "datamapper", "1.2"
