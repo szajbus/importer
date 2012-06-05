@@ -1,16 +1,20 @@
-require 'rubygems'
-require 'test/unit'
+##
+# Use Bundler
+require 'rubygems' if RUBY_VERSION < '1.9'
+require 'bundler/setup'
+
 require 'shoulda'
 require 'rr'
 require 'active_record'
 require 'mongo_mapper'
 require 'dm-core'
 require 'dm-validations'
+require 'dm-migrations'
 require 'dm-aggregates'
+require 'dm-transactions'
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-
+##
+# Load importer
 require 'importer'
 
 config = YAML::load(IO.read(File.join(File.dirname(__FILE__), 'database.yml')))

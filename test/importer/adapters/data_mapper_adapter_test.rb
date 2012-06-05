@@ -6,19 +6,20 @@ class Importer::Adapters::DataMapperAdapterTest < Test::Unit::TestCase
       include DataMapper::Resource
       include Importer
 
-      property :id,           DataMapper::Types::Serial
+      property :id,           DataMapper::Property::Serial
       property :customid,     String
       property :name,         String
       property :description,  String
       property :price,        Float
 
-      validates_is_number :price
+      validates_numericality_of :price
 
       def self.find_on_import(import, attributes)
         first(:customid => attributes["customid"])
       end
     end
 
+    DataMapper.finalize
     DataMapper.auto_migrate!
   end
 
@@ -44,9 +45,10 @@ class Importer::Adapters::DataMapperAdapterTest < Test::Unit::TestCase
         @import = Product.import(fixture_file("products.xml"))
       end
 
-      should_change("product's name", :from => "A pink ball", :to => "A black ball") { @product.reload.name }
+      should "correctly update existing product" do
+        assert_equal "A black ball", @product.reload.name
+      end
 
-      should_change("products count", :by => 1) { Product.count }
       should "correctly create new product" do
         product = Product.last
 
@@ -95,19 +97,29 @@ class Importer::Adapters::DataMapperAdapterTest < Test::Unit::TestCase
           end
         end
 
+        DataMapper.finalize
+
         begin
           InvalidProduct.import(fixture_file("products.xml"))
         rescue ::Exception => e
           @exception = e
         end
+
+        @count = InvalidProduct.count
       end
 
       def teardown
         undef_class("InvalidProduct")
       end
 
-      should_not_change("product's name") { @product.reload.name }
-      should_not_change("products count") { InvalidProduct.count }
+      should "not update exising product" do
+        assert_equal "A pink ball", @product.reload.name
+      end
+
+      should "not create new products" do
+        assert_equal @count, InvalidProduct.count
+      end
+
       should "propagate exception" do
         assert_equal "An error occured.", @exception.message
       end

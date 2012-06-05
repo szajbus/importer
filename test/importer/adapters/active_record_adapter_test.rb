@@ -42,9 +42,10 @@ class Importer::Adapters::ActiveRecordAdapterTest < Test::Unit::TestCase
         @import = Product.import(fixture_file("products.xml"))
       end
 
-      should_change("product's name", :from => "A pink ball", :to => "A black ball") { @product.reload.name }
+      should "correctly update existing product" do
+        assert_equal "A black ball", @product.reload.name
+      end
 
-      should_change("products count", :by => 1) { Product.count }
       should "correctly create new product" do
         product = Product.last
 
@@ -82,7 +83,7 @@ class Importer::Adapters::ActiveRecordAdapterTest < Test::Unit::TestCase
     context "when there is exception during import process" do
       setup do
         def_class("InvalidProduct", Product) do
-          set_table_name "products"
+          table_name = "products"
 
           def self.find_on_import(import, attributes)
             if attributes["customid"] == "3"
@@ -98,14 +99,22 @@ class Importer::Adapters::ActiveRecordAdapterTest < Test::Unit::TestCase
         rescue ::Exception => e
           @exception = e
         end
+
+        @count = InvalidProduct.count
       end
 
       def teardown
         undef_class("InvalidProduct")
       end
 
-      should_not_change("product's name") { @product.reload.name }
-      should_not_change("products count") { InvalidProduct.count }
+      should "not update existing product" do
+        assert_equal "A pink ball", @product.reload.name
+      end
+
+      should "not create new products" do
+        assert_equal @count, InvalidProduct.count
+      end
+
       should "propagate exception" do
         assert_equal "An error occured.", @exception.message
       end

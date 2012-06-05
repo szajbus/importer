@@ -42,9 +42,10 @@ class Importer::Adapters::MongoMapperAdapterTest < Test::Unit::TestCase
         @import = Product.import(fixture_file("products.xml"))
       end
 
-      should_change("product's name", :from => "A pink ball", :to => "A black ball") { @product.reload.name }
+      should "correctly update existing product" do
+        assert_equal "A black ball", @product.reload.name
+      end
 
-      should_change("products count", :by => 1) { Product.count }
       should "correctly create new product" do
         product = Product.find_by_customid("2")
 
@@ -75,7 +76,7 @@ class Importer::Adapters::MongoMapperAdapterTest < Test::Unit::TestCase
 
         assert_equal @invalid_object,   invalid_object.data
         assert_equal 'invalid_object',  invalid_object.state
-        assert_equal ["Price must be a number"], invalid_object.validation_errors
+        assert_equal ["Price is not a number"], invalid_object.validation_errors
       end
     end
 
