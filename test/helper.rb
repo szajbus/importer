@@ -24,7 +24,7 @@ DataMapper.setup(:default, config['test'])
 MongoMapper.connection = Mongo::Connection.new('127.0.0.1', 27017)
 MongoMapper.database = 'importer-test'
 
-class Test::Unit::TestCase
+class ActiveSupport::TestCase
   include RR::Adapters::TestUnit
 
   # return path to a fixture file from test/fixtures dir

@@ -1,6 +1,6 @@
 require 'helper'
 
-class Importer::ParserTest < Test::Unit::TestCase
+class Importer::ParserTest < ActiveSupport::TestCase
   should "return Xml parser for file with .xml extension" do
     assert_equal Importer::Parser::Xml, Importer::Parser.get_klass("file.xml")
   end

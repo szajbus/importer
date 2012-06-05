@@ -1,6 +1,6 @@
 require 'helper'
 
-class Importer::Parser::XmlTest < Test::Unit::TestCase
+class Importer::Parser::XmlTest < ActiveSupport::TestCase
   context "parsing an XML file with many objects defined" do
     setup { @data = Importer::Parser::Xml.run(fixture_file("products.xml")) }
 

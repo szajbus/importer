@@ -1,7 +1,7 @@
 require 'helper'
 
-class Importer::Adapters::DataMapperAdapterTest < Test::Unit::TestCase
-  def setup
+class Importer::Adapters::DataMapperAdapterTest < ActiveSupport::TestCase
+  setup do
     def_class("Product") do
       include DataMapper::Resource
       include Importer
@@ -23,7 +23,7 @@ class Importer::Adapters::DataMapperAdapterTest < Test::Unit::TestCase
     DataMapper.auto_migrate!
   end
 
-  def teardown
+  teardown do
     undef_class("Product")
   end
 
@@ -108,7 +108,7 @@ class Importer::Adapters::DataMapperAdapterTest < Test::Unit::TestCase
         @count = InvalidProduct.count
       end
 
-      def teardown
+      teardown do
         undef_class("InvalidProduct")
       end
 

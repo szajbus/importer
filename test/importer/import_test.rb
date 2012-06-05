@@ -1,7 +1,7 @@
 require 'helper'
 
-class Importer::ImportTest < Test::Unit::TestCase
-  def setup
+class Importer::ImportTest < ActiveSupport::TestCase
+  setup do
     @import = Importer::Import.new
   end
 

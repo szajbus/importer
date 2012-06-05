@@ -1,7 +1,7 @@
 require 'helper'
 
-class Importer::Adapters::ActiveRecordAdapterTest < Test::Unit::TestCase
-  def setup
+class Importer::Adapters::ActiveRecordAdapterTest < ActiveSupport::TestCase
+  setup do
     ActiveRecord::Base.connection.create_table :products, { :force => true } do |t|
       t.string  :customid
       t.string  :name
@@ -20,7 +20,7 @@ class Importer::Adapters::ActiveRecordAdapterTest < Test::Unit::TestCase
     end
   end
 
-  def teardown
+  teardown do
     undef_class("Product")
   end
 
@@ -103,7 +103,7 @@ class Importer::Adapters::ActiveRecordAdapterTest < Test::Unit::TestCase
         @count = InvalidProduct.count
       end
 
-      def teardown
+      teardown do
         undef_class("InvalidProduct")
       end
 

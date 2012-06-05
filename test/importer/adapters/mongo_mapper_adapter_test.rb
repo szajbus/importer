@@ -1,7 +1,7 @@
 require 'helper'
 
-class Importer::Adapters::MongoMapperAdapterTest < Test::Unit::TestCase
-  def setup
+class Importer::Adapters::MongoMapperAdapterTest < ActiveSupport::TestCase
+  setup do
     def_class("Product") do
       include MongoMapper::Document
       include Importer
@@ -19,7 +19,7 @@ class Importer::Adapters::MongoMapperAdapterTest < Test::Unit::TestCase
     end
   end
 
-  def teardown
+  teardown do
     MongoMapper.database.drop_collection("products")
     undef_class("Product")
   end
@@ -104,7 +104,7 @@ class Importer::Adapters::MongoMapperAdapterTest < Test::Unit::TestCase
         end
       end
 
-      def teardown
+      teardown do
         undef_class("InvalidProduct")
       end
 

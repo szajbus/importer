@@ -1,6 +1,6 @@
 require 'helper'
 
-class Importer::ImportedObjectTest < Test::Unit::TestCase
+class Importer::ImportedObjectTest < ActiveSupport::TestCase
   context "creating a new imported object" do
     setup do
       @data = { 'a' => 'b' }

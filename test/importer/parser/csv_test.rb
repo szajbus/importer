@@ -1,6 +1,6 @@
 require 'helper'
 
-class Importer::Parser::CsvTest < Test::Unit::TestCase
+class Importer::Parser::CsvTest < ActiveSupport::TestCase
   context "parsing an CSV file with many objects defined" do
     setup { @data = Importer::Parser::Csv.run(fixture_file("products.csv")) }
 
