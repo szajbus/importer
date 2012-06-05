@@ -17,15 +17,13 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency "crack", ">= 0.1.6"
   gem.add_runtime_dependency "fastercsv", ">= 1.5.0"
-  gem.add_development_dependency "activerecord", ">= 0"
-  gem.add_development_dependency "mongo_mapper", ">= 0.7.0"
-  gem.add_development_dependency "dm-core", ">= 0.10.2"
-  gem.add_development_dependency "dm-validations", ">= 0.10.2"
-  gem.add_development_dependency "dm-aggregates", ">= 0.10.2"
-  gem.add_development_dependency "dm-sqlite-adapter", ">= 0.10.2"
-  gem.add_development_dependency "do_sqlite3", ">= 0.10.1.1"
-  gem.add_development_dependency "shoulda", ">= 0"
-  gem.add_development_dependency "sqlite3-ruby", ">= 0"
-  gem.add_development_dependency "rr", ">= 0"
+  gem.add_development_dependency "activerecord", "3.2.5"
+  gem.add_development_dependency "mongo_mapper", "0.11.1"
+  gem.add_development_dependency "datamapper", "1.2"
+  gem.add_development_dependency "dm-sqlite-adapter", "1.2"
+  gem.add_development_dependency "do_sqlite3", "0.10.8"
+  gem.add_development_dependency "thoughtbot-shoulda", "2.11.1"
+  gem.add_development_dependency "sqlite3-ruby", "1.3.3"
+  gem.add_development_dependency "rr", "1.0.4"
 end
 
